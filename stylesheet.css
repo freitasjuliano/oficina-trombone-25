@@ -1,0 +1,465 @@
+:root {
+  --color-bg: #FEFEFE;
+  --color-border: #C7C7C7;
+  --color-accent: #7677E3;
+  --color-text-primary: #040104;
+  --color-text-secondary: #9C9A9D;
+  --color-surface: #F6F4FC;
+}
+
+@font-face {
+  font-family: "DingbatsBrasilia";
+  src: url("./fonts/dingbats_brasilia_beta.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "productsans";
+  src: url("./fonts/Product_Sans_Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Courier New", monospace;
+  color: var(--color-text-primary);
+  margin: 0 20px;
+  height: 100dvh;
+  overflow-x: hidden;
+}
+
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+
+p, h1, h2, h3, h4, h5, h6, a, span, button, label, input {
+  overflow-wrap: break-word;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+header {
+  text-align: center;
+  margin-top: 30px;
+  width: calc(100dvw - 40px);
+  display: flex;
+  flex-direction: column;
+}
+
+.container { container-type: inline-size; }
+
+.fit-text {
+  font-size: 14.3cqw;
+  white-space: nowrap;
+  font-family: "DingbatsBrasilia";
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+h1 {
+  font-size: 2.25em;
+  font-family: "productsans";
+  margin: 0;
+  font-weight: normal;
+  text-align: left;
+  color: var(--color-text-primary);
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+  gap: 8px;
+}
+
+.date {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  margin-left: 4px;
+}
+
+.playlist {
+  text-align: left;
+  align-self: baseline;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  overflow-y: auto;
+  width: -webkit-fill-available;
+}
+
+.playlist-itens {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;   /* takes all remaining space */
+  overflow-y: auto;
+  gap: 12px;
+}
+
+
+.playlist label {
+  display: flex;
+  gap: 12px;
+  font-size: 16px;
+  font-family: "productsans", system-ui, sans-serif;
+  color: var(--color-text-primary);
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-surface);
+  width: 100%;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.playlist .task-text {
+  flex: 1;               /* ocupa o espaço disponível */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  opacity: 0.6;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* botão deletar (material icons) */
+label .delete {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: .2s;
+  user-select: none;
+  padding-left: 8px;
+}
+label .delete:hover {
+  opacity: 1;
+}
+
+/* botão enviar */
+.new-input .send { cursor: pointer; display:inline-flex; align-items:center; justify-content:center; padding:8px; }
+
+
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.new-input {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.add-input {
+  align-self: flex-start;
+  font-size: 16px;
+  font-family: "productsans";
+  border: none;
+  padding: 18px 16px;
+  flex: 1;
+  background: none;
+  outline: none;
+  text-align: left;
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+  border-radius: 999px;
+}
+
+.send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+   padding: 12px;
+   border-radius: 999px;
+   background-color: var(--color-accent);
+   color: var(--color-surface);
+   cursor: pointer;
+}
+
+.add-input::placeholder { color: var(--color-accent); }
+
+#anotacoes.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sections {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding: 30px 20px;
+  font-size: 1.4em;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  transition: background 0.2s;
+}
+
+.section-link:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-link:hover {
+  background-color: var(--color-surface);
+}
+
+.trombone img {
+  width: 34px;
+  height: auto;
+}
+
+.material-symbols-outlined {
+  font-size: 36px !important;
+  color: var(--color-accent);
+  transition: transform 0.3s, color 0.3s;
+}
+
+/* Accordion open modifier */
+.accordion[open] {
+  background: var(--color-surface);
+}
+
+.accordion[open] .material-symbols-outlined {
+  transform: rotate(180deg) scaleX(-1);
+  color: var(--color-accent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  /*  padding: 10px; */
+  gap: 2px;
+  height: 100%;
+}
+
+#escala {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /*  padding: 10px; */
+  gap: 2px;
+  height: fit-content;
+}
+
+.note {
+  color: #333;
+  background: var(--color-surface);
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 20px;
+  transition: background-color 0.2s;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: "productsans";
+}
+
+.note-content {
+  transform: rotate(90deg);
+  font-size: 1.5rem; /* Mova o font-size e o padding para cá */
+  padding: 20px;
+  white-space: nowrap;
+}
+
+#escala_content{
+transform: rotate(0deg);
+}
+
+.note:active {
+  background-color: var(--color-accent);
+}
+
+
+
+
+
+/* --- Tabs --- */
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  margin-bottom: 20px;
+  width: max-content;
+  align-self: baseline;
+}
+
+.tab {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  font-family: "productsans";
+  font-size: 14px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background-color: var(--color-surface);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.tab-icon {
+  color: var(--color-accent) !important;
+  font-size: 24px !important;
+}
+
+.tab.active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+#zine.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tab-content, .icon_selected, .tab.active .tab-icon, .tab span, .video-content {
+  display: none; /* esconde o texto */
+}
+
+.tab.active span, .tab.active .icon_selected{
+  display: inline; /* mostra o texto quando a tab está ativa */
+}
+
+
+.tab.active .tab-icon {
+  color: var(--color-bg) !important;
+}
+
+.tab-content.active, .video-content.active  {
+  display: block;
+}
+
+.tab-video {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-family: "productsans";
+  margin-bottom:4px;
+  cursor: pointer;
+}
+
+.tab-video.active {
+ color: var(--color-accent);
+}
+
+
+
+/* Estilo para item de lista concluído */
+.playlist input[type="checkbox"]:checked + .task-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+
+/* --- Caixa branca --- */
+.content-box {
+  width: 100%;
+  display: flex;
+  flex: 1;
+}
+
+
+/* Wrapper com mesma largura do WeotuAB */
+.title-container-wrapper {
+  width: 100%;
+  container-type: inline-size; /* permite cqw */
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* O SVG escala exatamente como seu texto fit-text */
+.title-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+video {
+  border-radius: 8px;
+}
+
+#zine img {
+width: 70%;
+ box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+ margin-top: 16px;
+ margin-bottom: 16px;
+
+}
+
+.center {
+  display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 100%;
+    align-self: center;
+    align-items: center;
+}
+
+@media (min-width: 600px) {
+  body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    background: var(--color-bg);
+  }
+
+  header {
+    max-width: 480px;    /* keeps it looking like the phone version */
+    width: 100%;
+  }
+
+  /* Hide EVERYTHING except the header */
+  body > *:not(header) {
+    display: none !important;
+  }
+}
+
+

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oficina 25'</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <!--  <link rel="stylesheet" href="accordion.css"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_outward" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_2" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=checklist" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=book_5" />
+
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="fit-text">WeotuAB</div>
+  </div>
+
+  <div class="title-container-wrapper">
+    <img class="title-svg" src="./images/title.svg" alt="Título Oficina 25’">
+  </div>
+
+  <p class="date"></p>
+</header>
+
+<section class="tabs">
+  <button class="tab active" data-target="anotacoes">
+    <img class="tab-icon" src="./images/checklist.svg" alt="checklist">
+    <img class="icon_selected" src="./images/checklist_s.svg" alt="checklist">
+    <span>Tarefas</span>
+  </button>
+
+  <button class="tab" data-target="notas">
+    <img class="tab-icon" src="./images/music_note.svg" alt="music">
+    <img class="icon_selected" src="./images/music_note_s.svg" alt="music">
+    <span>Notas</span>
+  </button>
+
+  <button class="tab" data-target="escalas">
+    <img class="tab-icon" src="./images/escala.svg" alt="music">
+    <img class="icon_selected" src="./images/escala_s.svg" alt="music">
+    <span>Escalas</span>
+  </button>
+
+  <button class="tab" data-target="musicas">
+    <img class="tab-icon" src="./images/movie_speaker.svg" alt="music video">
+    <img class="icon_selected" src="./images/movie_speaker_s.svg" alt="music video">
+    <span>Músicas</span>
+  </button>
+
+  <button class="tab" data-target="zine">
+    <img class="tab-icon" src="./images/book.svg" alt="zine">
+    <img class="icon_selected" src="./images/book_s.svg" alt="zine">
+    <span>Zine</span>
+  </button>
+</section>
+
+<div class="content-box">
+
+  <div class="tab-content active" id="anotacoes">
+    <section class="playlist">
+      <div class="empty-state-list">
+        <img src="./images/add-notation.svg" alt="add notation">
+        <p>adicione uma anotação para seus estudos futuros</p>
+      </div>
+      <div class="playlist-itens">
+  
+      </div>
+
+      <!-- <div class="new-input">
+        <input type="text" class="add-input" placeholder="Adicione uma refa...">
+        <div class="send" style="font-size: 28px; font-weight: medium; width: 60px;" >
+          +
+        </div>
+      </div> -->
+    </section>
+  </div>
+
+  <div class="tab-content" id="escalas">
+      <h4>Sib menor</h4>
+      <div class="grid" id="escala">
+          <!-- Row 1 -->
+        <div class="note" data-sound="Sib.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Si♭</div>
+        </div>
+        <div class="note" data-sound="Do_low.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Dó</div>
+        </div>
+        <div class="note" data-sound="Re_low.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Ré</div>
+        </div>
+        <div class="note" data-sound="Mib.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Mi♭</div>
+        </div>
+        <div class="note" data-sound="Fa.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Fá</div>
+        </div>
+        <div class="note" data-sound="Sol_high.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Sol</div>
+        </div>
+        <div class="note" data-sound="Lab_low.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Lá♭</div>
+        </div>
+        <div class="note" data-sound="Sib_high.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Si♭</div>
+        </div>
+      </div>
+
+            <h4>Mib menor</h4>
+      <div class="grid" id="escala">
+          <!-- Row 1 -->
+        <div class="note" data-sound="Mib.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Mi♭</div>
+        </div>
+        <div class="note" data-sound="Fa.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Fá</div>
+        </div>
+        <div class="note" data-sound="Sol_high.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Sol</div>
+        </div>
+        <div class="note" data-sound="Lab_high.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Láb</div>
+        </div>
+        <div class="note" data-sound="Sib_high.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Si♭</div>
+        </div>
+        <div class="note" data-sound="Do.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Dó</div>
+        </div>
+        <div class="note" data-sound="Re.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Ré</div>
+        </div>
+        <div class="note" data-sound="Mib_highest.mp3" id="escala_note">
+            <div class="note-content" id="escala_content">Mi♭</div>
+        </div>
+      </div>
+  </div>
+
+
+  <div class="tab-content" id="notas">
+      <div class="grid">
+          <!-- Row 1 -->
+      <div class="note" data-sound="Sib.mp3">
+          <div class="note-content">Si♭</div>
+      </div>
+      <div class="note" data-sound="Fa.mp3">
+          <div class="note-content">Fá</div>
+      </div>
+      <div class="note" data-sound="Sib_high.mp3">
+          <div class="note-content">Si♭</div>
+      </div>
+      <div class="note" data-sound="Re.mp3">
+          <div class="note-content">Ré</div>
+      </div>
+      <div class="note" data-sound="Fa_highest.mp3">
+          <div class="note-content">Fá</div>
+      </div>
+      <div class="note" data-sound="Lab_highest.mp3">
+          <div class="note-content">La♭</div>
+      </div>
+
+          <!-- Row 2 -->
+          <div class="note" data-sound="La.mp3">
+          <div class="note-content">Lá</div>
+      </div>
+      <div class="note" data-sound="Mi.mp3">
+          <div class="note-content">Mi</div>
+      </div>
+      <div class="note" data-sound="La_high.mp3">
+          <div class="note-content">Lá</div>
+      </div>
+      <div class="note" data-sound="Reb.mp3">
+          <div class="note-content">Ré♭</div>
+      </div>
+      <div class="note" data-sound="Mi_highest.mp3">
+          <div class="note-content">Mi</div>
+      </div>
+      <div class="note" data-sound="Sol_highest.mp3">
+          <div class="note-content">Sol</div>
+      </div>
+
+          <!-- Row 3 -->
+      <div class="note" data-sound="Lab.mp3">
+          <div class="note-content">Lá♭</div>
+      </div>
+      <div class="note" data-sound="Mib.mp3">
+          <div class="note-content">Mi♭</div>
+      </div>
+      <div class="note" data-sound="Lab_high.mp3">
+          <div class="note-content">Lá♭</div>
+      </div>
+      <div class="note" data-sound="Do.mp3">
+          <div class="note-content">Dó</div>
+      </div>
+      <div class="note" data-sound="Mib_highest.mp3">
+          <div class="note-content">Mi♭</div>
+      </div>
+      <div class="note" data-sound="Solb_highest.mp3">
+          <div class="note-content">Sol♭</div>
+      </div>
+
+          <!-- Row 4 -->
+      <div class="note" data-sound="Sol.mp3">
+          <div class="note-content">Sol</div>
+      </div>
+      <div class="note" data-sound="Re_low.mp3">
+          <div class="note-content">Ré</div>
+      </div>
+      <div class="note" data-sound="Sol_high.mp3">
+          <div class="note-content">Sol</div>
+      </div>
+      <div class="note" data-sound="Si.mp3">
+          <div class="note-content">Si</div>
+      </div>
+      <div class="note" data-sound="Re.mp3">
+          <div class="note-content">Re</div>
+      </div>
+      <div class="note" data-sound="Fa_highest.mp3">
+          <div class="note-content">Fa</div>
+      </div>
+
+          <!-- Row 5 -->
+      <div class="note" data-sound="Solb.mp3">
+          <div class="note-content">Sol♭</div>
+      </div>
+      <div class="note" data-sound="Reb_low.mp3">
+          <div class="note-content">Ré♭</div>
+      </div>
+      <div class="note" data-sound="Solb_high.mp3">
+          <div class="note-content">Sol♭</div>
+      </div>
+      <div class="note" data-sound="Sib_low.mp3">
+          <div class="note-content">Si♭</div>
+      </div>
+      <div class="note" data-sound="Reb.mp3">
+          <div class="note-content">Re♭</div>
+      </div>
+      <div class="note" data-sound="Mi_highest.mp3">
+          <div class="note-content">Mi</div>
+      </div>
+
+          <!-- Row 6 -->
+      <div class="note" data-sound="Fa_low.mp3">
+          <div class="note-content">Fá</div>
+      </div>
+      <div class="note" data-sound="Do_low.mp3">
+          <div class="note-content">Dó</div>
+      </div>
+      <div class="note" data-sound="Fa_high.mp3">
+          <div class="note-content">Fá</div>
+      </div>
+      <div class="note" data-sound="La_low.mp3">
+          <div class="note-content">Lá</div>
+      </div>
+      <div class="note" data-sound="Do.mp3">
+          <div class="note-content">Dó</div>
+      </div>
+      <div class="note" data-sound="Mib_highest.mp3">
+          <div class="note-content">Mi♭</div>
+      </div>
+
+
+          <!-- Row 7 -->
+      <div class="note" data-sound="Mi_low.mp3">
+          <div class="note-content">Mi</div>
+      </div>
+      <div class="note" data-sound="Si_low.mp3">
+          <div class="note-content">Si</div>
+      </div>
+      <div class="note" data-sound="Mi_high.mp3">
+          <div class="note-content">Mi</div>
+      </div>
+      <div class="note" data-sound="Lab_low.mp3">
+          <div class="note-content">Lá♭</div>
+      </div>
+      <div class="note" data-sound="Si.mp3">
+          <div class="note-content">Si</div>
+      </div>
+      <div class="note" data-sound="Re.mp3">
+          <div class="note-content">Ré</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="musicas">
+    <div class="tabs-video">
+      <button class="tab-video active" data-target="jair">Jair</button>
+      <button class="tab-video" data-target="pink_floyd">Pink Floyd</button>
+      <button class="tab-video" data-target="musicas">Mirislou</button>
+    </div>
+    <div class="video-content active" id="jair">
+      <video controls src="./videos/jair.mp4"></video>
+    </div>
+    <div class="video-content" id="pink_floyd">
+    <video controls src="./videos/pink_floyd.mp4"></video>
+    </div>
+  </div>
+
+  <div class="tab-content" id="zine">
+    <div class="center">
+      <img src="./images/zine-so.svg" alt="zine">
+      <h4>Zine Oficina 25'</h4>
+      <p>Esgotado</p>
+    </div>
+  </div>
+
+</div>
+<script>
+  document.querySelectorAll(".tab-video").forEach(tab => {
+  tab.addEventListener("click", () => {
+
+    // muda visual dos botões
+    document.querySelectorAll(".tab-video").forEach(t =>
+      t.classList.remove("active")
+    );
+    tab.classList.add("active");
+
+    // troca os vídeos
+    const target = tab.getAttribute("data-target");
+    document.querySelectorAll(".video-content").forEach(c =>
+      c.classList.remove("active")
+    );
+    document.getElementById(target).classList.add("active");
+  });
+});
+
+</script>
+<script src="./scripts/date.js"></script>
+<script src="./scripts/tarefas.js"></script>
+<script src="./scripts/note.js"></script>
+<script src="./scripts/tabs.js"></script>
+</body>
+</html>

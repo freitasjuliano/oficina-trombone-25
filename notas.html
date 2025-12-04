@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trombone Keypad</title>
+  <link rel="stylesheet" href="notas.css">
+
+  <!-- Google Font: Lateef -->
+  <link href="https://fonts.googleapis.com/css2?family=Lateef&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=close" />
+
+</head>
+<body>
+
+  <div> <a href="./index.html"><span class="material-symbols-outlined">close</span></a></div>
+
+  <div class="grid">
+    <!-- Row 1 -->
+    <div class="note" data-sound="Sib.mp3">Sib</div>
+    <div class="note" data-sound="Fa.mp3">Fá</div>
+    <div class="note" data-sound="Sib_high.mp3">Sib</div>
+    <div class="note" data-sound="Re.mp3">Ré</div>
+
+    <!-- Row 2 -->
+    <div class="note" data-sound="La.mp3">Lá</div>
+    <div class="note" data-sound="Mi.mp3">Mi</div>
+    <div class="note" data-sound="La_high.mp3">Lá</div>
+    <div class="note" data-sound="Reb.mp3">Ré♭</div>
+
+    <!-- Row 3 -->
+    <div class="note" data-sound="Lab.mp3">Láb</div>
+    <div class="note" data-sound="Mib.mp3">Mib</div>
+    <div class="note" data-sound="Lab_high.mp3">Láb</div>
+    <div class="note" data-sound="Do.mp3">Dó</div>
+
+    <!-- Row 4 -->
+    <div class="note" data-sound="Sol.mp3">Sol</div>
+    <div class="note" data-sound="Re_low.mp3">Ré</div>
+    <div class="note" data-sound="Sol_high.mp3">Sol</div>
+    <div class="note" data-sound="Si.mp3">Si</div>
+
+    <!-- Row 5 -->
+    <div class="note" data-sound="Solb.mp3">Solb</div>
+    <div class="note" data-sound="Reb_low.mp3">Réb</div>
+    <div class="note" data-sound="Solb_high.mp3">Solb</div>
+    <div class="note" data-sound="Sib_low.mp3">Sib</div>
+
+    <!-- Row 6 -->
+    <div class="note" data-sound="Fa_low.mp3">Fá</div>
+    <div class="note" data-sound="Do_low.mp3">Dó</div>
+    <div class="note" data-sound="Fa_high.mp3">Fá</div>
+    <div class="note" data-sound="La_low.mp3">Lá</div>
+
+    <!-- Row 7 -->
+    <div class="note" data-sound="Mi_low.mp3">Mi</div>
+    <div class="note" data-sound="Si_low.mp3">Si</div>
+    <div class="note" data-sound="Mi_high.mp3">Mi</div>
+    <div class="note" data-sound="Lab_low.mp3">Láb</div>
+  </div>
+
+  <script>
+    document.querySelectorAll(".note").forEach(note => {
+      note.addEventListener("click", () => {
+        const soundFile = note.getAttribute("data-sound");
+        if (soundFile) {
+          const audio = new Audio(`sounds/${soundFile}`);
+          audio.play();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

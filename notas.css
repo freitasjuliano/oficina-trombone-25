@@ -1,0 +1,40 @@
+ body {
+      background-color: #E9E9E9;
+      margin: 0;
+      font-family: "Lateef", serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px;
+
+    }
+
+    .note {
+      color: #333;
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 20px;
+      transition: background-color 0.2s;
+      user-select: none;
+      cursor: pointer;
+      border: 1px solid #3d3d3d;
+      transform: rotate(90deg);
+      transform-origin: center; /* optional — controls the rotation anchor point */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1 / 1; /* keeps them square */
+      overflow: hidden; /* prevents text from overflowing */
+    }
+
+    .note:active {
+      background-color: #6a5acd; /* highlight when pressed */
+    }
