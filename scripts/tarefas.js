@@ -68,25 +68,25 @@ function createListItem({ id, titulo }) {
  * @param {Array} apiItems - Tarefas vindas do Strapi.
  */
 function renderList(apiItems = []) {
-    playlistContainer.innerHTML = "";
-    
-    // Carrega status salvos localmente
-    const rawCheckedIds = localStorage.getItem(STORAGE_KEY);
-    const checkedIds = rawCheckedIds ? JSON.parse(rawCheckedIds) : [];
-    
-    apiItems.forEach(item => {
-    
-    // Adicionar um ponto de controle simples para itens sem dados
-if (!item || !item.id || !item.attributes) { // Adicionado check para .attributes
-        console.warn('Item pulado devido à falta de ID ou Attributes:', item);
-        return; 
-   }
+    playlistContainer.innerHTML = "";
+    
+    // ... código de carregamento do localStorage omitido ...
+    const checkedIds = rawCheckedIds ? JSON.parse(rawCheckedIds) : [];
+    
+    apiItems.forEach(item => {
+    
+   // Verificação de segurança:
+   if (!item || !item.id || !item.attributes) {
+        console.warn('Item pulado devido à falta de ID ou Attributes:', item);
+        return; 
+   }
 
-    const id = item.id;
-     // 🛑 CORREÇÃO AQUI: Acessando 'Titulo' dentro de .attributes
-     const titulo = item.attributes.Titulo; // Use 'Titulo' se for a chave exata
-    
-    const isChecked = checkedIds.includes(String(id)); // Verifica se a tarefa está salva como concluída
+    const id = item.id;
+    // 🎯 CORREÇÃO CRUCIAL AQUI: 
+    // Garanta que 'Titulo' (com 'T' maiúsculo) seja usado, pois é a chave do JSON do Strapi.
+    const titulo = item.attributes.Titulo; // <<<<<< GARANTA QUE ESTA LINHA ESTEJA ASSIM
+
+    const isChecked = checkedIds.includes(String(id));
     
     // Garantir que a função de criação de item receba o ID e o título
     const label = createListItem({ id, titulo });
