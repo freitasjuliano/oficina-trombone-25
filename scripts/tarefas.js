@@ -15,16 +15,16 @@ const STORAGE_KEY = "playlist_checked_status";
 
 /**
  * Salva o estado atual de checked/unchecked no localStorage.
- * Não salva o texto da tarefa, apenas o status de conclusão.
+ * Captura o 'data-id' de todos os checkboxes marcados.
  */
 function saveCheckedStatus() {
-    // Captura os IDs ou Textos das tarefas marcadas
-    const data = Array.from(playlistContainer.querySelectorAll("input[type='checkbox']"))
+    // Captura o valor do atributo data-id de todos os checkboxes marcados
+    const checkedIds = Array.from(playlistContainer.querySelectorAll("input[type='checkbox']"))
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.closest("label").dataset.taskId); // Usa o ID da API como chave
+        .map(checkbox => checkbox.dataset.id); // Pega o ID da API do atributo data-id
         
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    toggleEmptyState();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedIds));
+    // A chamada a toggleEmptyState não é necessária aqui, pois a lista não muda.
 }
 
 /**
@@ -42,20 +42,31 @@ function toggleEmptyState() {
 // ------- DOM creation -------
 
 /**
- * Cria o item da lista usando os dados do Strapi (ID e Título).
+ * Cria o item da lista (um elemento <label> contendo <input> e <span>).
+ * @param {number} id - ID da tarefa vindo do Strapi.
+ * @param {string} titulo - Título da tarefa vindo do Strapi.
+ * @param {boolean} isChecked - Se a tarefa deve ser marcada como concluída.
  */
-function createListItem({ id, titulo }) {
+function createListItem({ id, titulo, isChecked = false }) {
     const label = document.createElement("label");
-    label.dataset.taskId = id; // Armazena o ID da API no elemento
     label.className = "task-item-label";
-
+    
+    // Cria o input
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.setAttribute("aria-label", "Marcar tarefa como concluída");
-
+    checkbox.setAttribute("data-id", id); // 🎯 CORREÇÃO: Define o ID no checkbox
+    checkbox.checked = isChecked;
+    
+    // Cria o texto
     const spanText = document.createElement("span");
     spanText.className = "task-text";
     spanText.textContent = titulo;
+    
+    // Adiciona a classe 'completed' se estiver marcado
+    if (isChecked) {
+        label.classList.add('completed');
+    }
 
     label.appendChild(checkbox);
     label.appendChild(spanText);
@@ -68,32 +79,46 @@ function createListItem({ id, titulo }) {
  * @param {Array} apiItems - Tarefas vindas do Strapi.
  */
 function renderList(apiItems = []) {
-    playlistContainer.innerHTML = "";
-    
-    // ... código de carregamento do localStorage omitido ...
-    const checkedIds = rawCheckedIds ? JSON.parse(rawCheckedIds) : [];
-    
-    apiItems.forEach(item => {
-    
-   // Verificação de segurança:
-   if (!item || !item.id || !item.attributes) {
-        console.warn('Item pulado devido à falta de ID ou Attributes:', item);
-        return; 
-   }
-
-    const id = item.id;
-    // 🎯 CORREÇÃO CRUCIAL AQUI: 
-    // Garanta que 'Titulo' (com 'T' maiúsculo) seja usado, pois é a chave do JSON do Strapi.
-    const titulo = item.attributes.Titulo; // <<<<<< GARANTA QUE ESTA LINHA ESTEJA ASSIM
-
-    const isChecked = checkedIds.includes(String(id));
+    playlistContainer.innerHTML = "";
     
-    // Garantir que a função de criação de item receba o ID e o título
-    const label = createListItem({ id, titulo });
-    label.querySelector('input[type="checkbox"]').checked = isChecked;
+    // 1. 🎯 CORREÇÃO CRUCIAL: Define 'rawCheckedIds' (Resolve o ReferenceError)
+    const rawCheckedIds = localStorage.getItem(STORAGE_KEY); 
+    
+    // 2. Converte os IDs salvos em um Array para fácil verificação
+    const checkedIds = rawCheckedIds ? JSON.parse(rawCheckedIds) : [];
+    
+    // Variáveis para ordenar no final
+    const completedItems = [];
+    const pendingItems = [];
+    
+    apiItems.forEach(item => {
+    
+        // Verificação de segurança:
+        if (!item || !item.id || !item.attributes) {
+            console.warn('Item pulado devido à falta de ID ou Attributes:', item);
+            return; 
+        }
 
-    playlistContainer.appendChild(label);
-});
+        const id = item.id;
+        // 3. Garantia: 'Titulo' (com 'T' maiúsculo) é a chave do JSON do Strapi.
+        const titulo = item.attributes.Titulo;
+
+        // Verifica se o ID desta tarefa está na lista de IDs marcados
+        const isChecked = checkedIds.includes(String(id));
+        
+        const label = createListItem({ id, titulo, isChecked });
+        
+        // Separa para ordenação
+        if (isChecked) {
+            completedItems.push(label);
+        } else {
+            pendingItems.push(label);
+        }
+    });
+    
+    // Renderiza primeiro os pendentes, depois os concluídos
+    pendingItems.forEach(item => playlistContainer.appendChild(item));
+    completedItems.forEach(item => playlistContainer.appendChild(item));
     
     toggleEmptyState();
 }
@@ -128,19 +153,35 @@ async function loadTasksFromStrapiAndLocal() {
 playlistContainer.addEventListener("change", (e) => {
     const checkbox = e.target;
     if (checkbox && checkbox.type === "checkbox") {
-        // Apenas salva o estado de conclusão no localStorage
+        
+        // Salva o novo estado de conclusão no localStorage
         saveCheckedStatus();
 
-        // Lógica opcional de mover tarefas marcadas para o final (se você quiser manter)
+        // Lógica de adicionar/remover classe 'completed' no label pai
         const label = checkbox.closest("label");
+        
         if (checkbox.checked) {
-            playlistContainer.appendChild(label);
+             label.classList.add("completed");
         } else {
-            playlistContainer.insertBefore(label, playlistContainer.firstChild);
+             label.classList.remove("completed");
+        }
+        
+        // Lógica de mover o item na lista (opcional, mas mantém a ordem visual)
+        if (checkbox.checked) {
+             // Move para o final da lista
+             playlistContainer.appendChild(label);
+        } else {
+             // Move para o topo da lista (antes do primeiro concluído)
+             const firstCompleted = playlistContainer.querySelector('.completed');
+             if (firstCompleted) {
+                 playlistContainer.insertBefore(label, firstCompleted);
+             } else {
+                 playlistContainer.prepend(label); // Se não houver concluídos, vai para o topo
+             }
         }
     }
 });
 
 
-// Inicialização (Substitui o antigo loadList())
+// Inicialização
 loadTasksFromStrapiAndLocal();
