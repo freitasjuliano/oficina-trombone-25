@@ -19,25 +19,19 @@ const STORAGE_KEY = "playlist_checked_status";
 // Utils
 // =====================
 
-/**
- * Salva o estado atual de checked/unchecked no localStorage.
- */
+/** Salva apenas o ID dos cards marcados */
 function saveCheckedStatus() {
     const checkedIds = Array.from(
         playlistContainer.querySelectorAll("input[type='checkbox']")
     )
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.dataset.id);
+        .filter(c => c.checked)
+        .map(c => c.dataset.id);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedIds));
 }
 
-/**
- * Exibe ou oculta o empty state
- */
+/** Empty state */
 function toggleEmptyState() {
-    if (!playlistContainer || !emptyState) return;
-
     if (playlistContainer.children.length === 0) {
         emptyState.classList.remove("hidden");
     } else {
@@ -45,132 +39,149 @@ function toggleEmptyState() {
     }
 }
 
+/** Formata a data do createdAt */
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    const formatter = new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+    return formatter.format(date);
+}
+
 // =====================
-// DOM creation
+// DOM creation — NOVO CARD COMPLETO
 // =====================
 
-/**
- * Cria o item visual da tarefa
- */
-function createListItem({ id, titulo, isChecked = false }) {
+function createTaskCard({ id, titulo, descricao, data, isChecked }) {
+    const card = document.createElement("div");
+    card.className = "card-checkbox";
+
+    // HEADER ------------------------
+    const header = document.createElement("div");
+    header.className = "card-checkbox-header";
+
     const label = document.createElement("label");
-    label.className = "task-item-label";
+    label.textContent = titulo;
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.setAttribute("aria-label", "Marcar tarefa como concluída");
-    checkbox.setAttribute("data-id", id);
+    checkbox.dataset.id = id;
     checkbox.checked = isChecked;
 
-    const spanText = document.createElement("span");
-    spanText.className = "task-text";
-    spanText.textContent = titulo;
+    header.appendChild(label);
+    header.appendChild(checkbox);
 
-    if (isChecked) {
-        label.classList.add("completed");
-    }
+    // BODY ---------------------------
+    const body = document.createElement("div");
+    body.className = "card-checkbox-body";
 
-    label.appendChild(checkbox);
-    label.appendChild(spanText);
+    const desc = document.createElement("p");
+    desc.className = "descricao-tarefa";
+    desc.textContent = descricao;
 
-    return label;
+    body.appendChild(desc);
+
+    // FOOTER -------------------------
+    const footer = document.createElement("div");
+    footer.className = "card-checkbox-footer";
+
+    const dateText = document.createElement("p");
+    dateText.className = "data-tarefa";
+    dateText.textContent = data;
+
+    footer.appendChild(dateText);
+
+    // MONTAGEM FINAL -----------------
+    card.appendChild(header);
+    card.appendChild(body);
+    card.appendChild(footer);
+
+    return card;
 }
 
-/**
- * Renderiza a lista usando os dados do Strapi e o localStorage
- */
+// =====================
+// Renderização
+// =====================
+
 function renderList(apiItems = []) {
     playlistContainer.innerHTML = "";
 
-    // IDs salvos
-    const rawCheckedIds = localStorage.getItem(STORAGE_KEY);
-    const checkedIds = rawCheckedIds ? JSON.parse(rawCheckedIds) : [];
+    const checkedIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 
-    const completedItems = [];
-    const pendingItems = [];
+    const completed = [];
+    const pending = [];
 
     apiItems.forEach(item => {
-        if (!item || !item.id) {
-            console.warn("Item ignorado por falta de ID:", item);
-            return;
-        }
-
         const id = item.id;
-        const titulo = item.Titulo; // <-- CORREÇÃO AQUI!
+
+        const titulo = item.Titulo;
+        const descricao = item.descricao; // minúsculo, como vem do Strapi
+        const data = formatDate(item.createdAt); // usa createdAt formatado como data
 
         const isChecked = checkedIds.includes(String(id));
 
-        const label = createListItem({
+        const card = createTaskCard({
             id,
             titulo,
+            descricao,
+            data,
             isChecked
         });
 
         if (isChecked) {
-            completedItems.push(label);
+            completed.push(card);
         } else {
-            pendingItems.push(label);
+            pending.push(card);
         }
     });
 
-    // Renderiza pendentes primeiro
-    pendingItems.forEach(item => playlistContainer.appendChild(item));
-    completedItems.forEach(item => playlistContainer.appendChild(item));
+    pending.forEach(c => playlistContainer.appendChild(c));
+    completed.forEach(c => playlistContainer.appendChild(c));
 
     toggleEmptyState();
 }
 
 // =====================
-// Strapi Integration
+// Strapi
 // =====================
 
-async function loadTasksFromStrapiAndLocal() {
+async function loadTasksFromStrapi() {
     try {
         const response = await fetch(`${API_URL}/lista-tarefas`);
 
-        if (!response.ok) {
-            throw new Error(`Strapi retornou erro: ${response.status}`);
-        }
+        if (!response.ok) throw new Error("Erro Strapi: " + response.status);
 
-        const jsonData = await response.json();
+        const json = await response.json();
+        renderList(json.data);
 
-        // Strapi Cloud v5 retorna dados no root
-        const tasks = jsonData.data;
-
-        renderList(tasks);
-
-    } catch (error) {
-        console.error("Erro ao carregar Strapi:", error);
-        playlistContainer.innerHTML =
-            "<li>Não foi possível conectar ao servidor de tarefas.</li>";
-        toggleEmptyState();
+    } catch (e) {
+        console.error(e);
+        playlistContainer.innerHTML = `<p>Erro ao carregar tarefas.</p>`;
     }
 }
 
 // =====================
-// Event delegation
+// Eventos
 // =====================
 
 playlistContainer.addEventListener("change", (e) => {
     const checkbox = e.target;
 
-    if (checkbox && checkbox.type === "checkbox") {
+    if (checkbox.type === "checkbox") {
         saveCheckedStatus();
 
-        const label = checkbox.closest("label");
+        const card = checkbox.closest(".card-checkbox");
 
         if (checkbox.checked) {
-            label.classList.add("completed");
-            playlistContainer.appendChild(label);
+            playlistContainer.appendChild(card);
         } else {
-            label.classList.remove("completed");
-
-            const firstCompleted = playlistContainer.querySelector(".completed");
-
+            const firstCompleted = playlistContainer.querySelector(".card-checkbox input:checked");
             if (firstCompleted) {
-                playlistContainer.insertBefore(label, firstCompleted);
+                playlistContainer.insertBefore(card, firstCompleted.closest(".card-checkbox"));
             } else {
-                playlistContainer.prepend(label);
+                playlistContainer.prepend(card);
             }
         }
     }
@@ -179,4 +190,4 @@ playlistContainer.addEventListener("change", (e) => {
 // =====================
 // Inicialização
 // =====================
-loadTasksFromStrapiAndLocal();
+loadTasksFromStrapi();
